@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   private users: User[] = [];
-  finById: any;
+
   async createUser(dto: CreateUserDTO) {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
@@ -15,10 +15,11 @@ export class UsersService {
       email: dto.email,
       password: hashedPassword,
       role: 'user',
-      createdAt: new Date(),
+      createdAt: new Date()
     };
     this.users.push(newUser);
-    return newUser;
+    const { password: _, ...result } = newUser;
+    return result;
   }
 
   findByEmail(email: string) {
@@ -26,6 +27,6 @@ export class UsersService {
   }
 
   findById(id: number) {
-    return this.users.find((user) => user.id == id);
+    return this.users.find((user) => user.id === id);
   }
 }
